@@ -19,14 +19,21 @@ function err(message: string, status = 400): Response {
 	return json({ error: message }, status);
 }
 
-function todayUTC(): string {
-	return new Date().toISOString().slice(0, 10);
+// Daily challenge rolls over at midnight Japan Standard Time (UTC+9, no DST).
+const DAILY_TZ = "Asia/Tokyo";
+const DAILY_KEY_FMT = new Intl.DateTimeFormat("en-CA", {
+	timeZone: DAILY_TZ,
+	year: "numeric",
+	month: "2-digit",
+	day: "2-digit",
+});
+
+function todayJST(): string {
+	return DAILY_KEY_FMT.format(new Date());
 }
 
 function dateKeyNDaysAgo(n: number): string {
-	const d = new Date();
-	d.setUTCDate(d.getUTCDate() - n);
-	return d.toISOString().slice(0, 10);
+	return DAILY_KEY_FMT.format(new Date(Date.now() - n * 86400000));
 }
 
 type Submission = {
@@ -46,7 +53,7 @@ function validSubmission(body: unknown): { ok: true; value: Submission } | { ok:
 	const score = b.score;
 	const wordCount = b.wordCount;
 	if (typeof dateKey !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(dateKey)) return { ok: false, error: "bad dateKey" };
-	const today = todayUTC();
+	const today = todayJST();
 	const cutoff = dateKeyNDaysAgo(MAX_DAYS);
 	if (dateKey > today) return { ok: false, error: "dateKey in future" };
 	if (dateKey < cutoff) return { ok: false, error: "dateKey too old" };
