@@ -1,0 +1,16 @@
+{
+	"compatibility_date": "2025-10-08",
+	"main": "src/index.ts",
+	"name": "d1-gridword",
+	"upload_source_maps": true,
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_id": "b2ea98df-4cb5-4b15-9b89-f3c534f297b8",
+			"database_name": "d1-gridword-database"
+		}
+	],
+	"observability": {
+		"enabled": true
+	}
+}
