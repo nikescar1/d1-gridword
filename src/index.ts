@@ -123,6 +123,24 @@ async function handleSubmit(request: Request, env: Env): Promise<Response> {
 	return json(results.map((r) => ({ n: r.name, s: r.score, w: r.words, t: r.ts })));
 }
 
+async function handleWordformHealth(env: Env): Promise<Response> {
+	const { results } = await env.WORDFORM_DB
+		.prepare(
+			`SELECT name FROM sqlite_master
+			 WHERE type='table'
+			   AND name NOT LIKE 'sqlite_%'
+			   AND name NOT LIKE '_cf_%'
+			   AND name NOT LIKE 'd1_%'
+			 ORDER BY name`
+		)
+		.all<{ name: string }>();
+	return json({
+		ok: true,
+		db: "d1-wordform-database",
+		tables: results.map((r) => r.name),
+	});
+}
+
 export default {
 	async fetch(request, env): Promise<Response> {
 		if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
@@ -132,6 +150,7 @@ export default {
 
 		if (request.method === "GET" && path === "/lb") return handleGetAll(env);
 		if (request.method === "POST" && path === "/lb/submit") return handleSubmit(request, env);
+		if (request.method === "GET" && path === "/wordform/health") return handleWordformHealth(env);
 		if (request.method === "GET" && path === "/") return json({ ok: true, service: "d1-gridword" });
 
 		return err("not found", 404);

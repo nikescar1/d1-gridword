@@ -8,6 +8,12 @@
 			"binding": "DB",
 			"database_id": "b2ea98df-4cb5-4b15-9b89-f3c534f297b8",
 			"database_name": "d1-gridword-database"
+		},
+		{
+			"binding": "WORDFORM_DB",
+			"database_id": "bb6731cb-7368-4c31-a509-4397a882db83",
+			"database_name": "d1-wordform-database",
+			"migrations_dir": "migrations-wordform"
 		}
 	],
 	"observability": {

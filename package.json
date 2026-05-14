@@ -11,7 +11,7 @@
 		"check": "tsc && wrangler deploy --dry-run",
 		"deploy": "wrangler deploy",
 		"dev": "npm run seedLocalD1 && wrangler dev",
-		"predeploy": "wrangler d1 migrations apply DB --remote",
-		"seedLocalD1": "wrangler d1 migrations apply DB --local"
+		"predeploy": "wrangler d1 migrations apply DB --remote && wrangler d1 migrations apply WORDFORM_DB --remote",
+		"seedLocalD1": "wrangler d1 migrations apply DB --local && wrangler d1 migrations apply WORDFORM_DB --local"
 	}
 }
